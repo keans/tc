@@ -7,6 +7,9 @@ from .project import Project
 
 
 class ProjectManager:
+    """
+    class to handle multiple projects
+    """
     def __init__(self, auto_load=True):
         self.projects = []
 
@@ -40,6 +43,9 @@ class ProjectManager:
 
     @property
     def has_current_project(self):
+        """
+        returns True, when current project file is existing
+        """
         return os.path.exists(CURRENT_PROJECT)
 
     def cancel_current(self):
@@ -81,6 +87,9 @@ class ProjectManager:
         self.projects.append(project)
 
     def csv_export(self, f):
+        """
+        exports all projects as csv
+        """
         fieldnames = [
             "uuid", "name", "start_time", "end_time",
             "description", "tags"

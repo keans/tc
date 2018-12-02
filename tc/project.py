@@ -3,6 +3,9 @@ import datetime
 
 
 class Project:
+    """
+    class that represents a project
+    """
     def __init__(
         self, name="", start_time="", end_time="", description="", tags=[]
     ):
@@ -15,6 +18,9 @@ class Project:
 
     @classmethod
     def create_from_dict(cls, d):
+        """
+        create a Project class instance from the given dictionary
+        """
         p = Project()
         p.parse(d)
 
@@ -31,12 +37,23 @@ class Project:
         return self.end_time - self.start_time
 
     def start(self):
+        """
+        set the start time to the current time
+        """
         self.start_time = datetime.datetime.now()
 
     def stop(self):
+        """
+        set the stop time to the current time
+        """
         self.end_time = datetime.datetime.now()
 
     def parse(self, j):
+        """
+        parse given dictionary and put variables in the
+        internal variables
+        """
+
         self.uuid = j["uuid"]
         self.name = j["name"]
         self.start_time = (
@@ -53,6 +70,9 @@ class Project:
         self.tags = j["tags"]
 
     def dict(self):
+        """
+        returns the inner variables as dictionary
+        """
         return {
             "uuid": self.uuid,
             "name": self.name,

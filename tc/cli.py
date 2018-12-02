@@ -10,6 +10,9 @@ def cli():
 
 
 def validate_tags(ctx, param, value):
+    """
+    helper to check tags input arguments
+    """
     try:
         tags = []
         for tag in value:
