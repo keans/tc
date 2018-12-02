@@ -2,7 +2,7 @@ tc
 ==
 
 ``tc`` is a simple console-based tool for the tracking of time. Since it
-is at an early stage of development, it has currently just a basic feature 
+is at an early stage of development, it has currently just a basic feature
 set, which may however change in the future.
 
 
@@ -26,17 +26,17 @@ Start a new project ``myproject``
 
 ::
 
-  tc add myproject +tag +me
+  tc start myproject +tag +me
 
 
 Status check currently running project:
 
 ::
 
-  tc status foobar
+  tc status
 
 
-Stop the currently running project and add it to the list of 
+Stop the currently running project and add it to the list of
 completed projects:
 
 ::
@@ -48,5 +48,4 @@ List all completed projects:
 
 ::
 
-  tc status list
-
+  tc list
