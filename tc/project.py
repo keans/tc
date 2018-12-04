@@ -1,6 +1,8 @@
 import uuid
 import datetime
 
+import dateutil.parser
+
 
 class Project:
     """
@@ -57,13 +59,13 @@ class Project:
         self.uuid = j["uuid"]
         self.name = j["name"]
         self.start_time = (
-            datetime.datetime.fromisoformat(j["start_time"])
-            if j["start_time"] != ""
+            dateutil.parser.parse(j["start_time"])
+            if j["start_time"] not in ("", None)
             else None
         )
         self.end_time = (
-            datetime.datetime.fromisoformat(j["end_time"])
-            if j["end_time"] != ""
+            dateutil.parser.parse(j["end_time"])
+            if j["end_time"] not in ("", None)
             else None
         )
         self.description = j["description"]

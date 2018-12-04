@@ -37,7 +37,7 @@ setup(
     packages=find_packages(
         exclude=['contrib', 'docs', 'tests']
     ),
-    install_requires=["Click"],
+    install_requires=["Click", "python-dateutil"],
     py_modules=["tc"],
     entry_points="""
        [console_scripts]

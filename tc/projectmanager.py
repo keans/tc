@@ -86,6 +86,17 @@ class ProjectManager:
         """
         self.projects.append(project)
 
+    def remove_project(self, project_uuid):
+        """
+        add project to the list of projects
+        """
+        for p in self.projects:
+            if p.uuid == project_uuid:
+                self.projects.remove(p)
+                return True
+
+        return False
+
     def csv_export(self, f):
         """
         exports all projects as csv

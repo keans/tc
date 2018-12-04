@@ -20,8 +20,8 @@ def start_project(project, tags, description):
     pm.save_current(p)
 
     click.echo(
-        "Starting project '{}' at {}...".format(
-            p.name, p.start_time.strftime("%H:%M:%S")
+        "Starting project '{}' at {}.".format(
+            p.name, p.start_time.strftime("%H:%M")
         )
     )
 
@@ -104,6 +104,20 @@ def list_projects():
                 else ""
             )
         )
+
+
+def remove_project(project_uuid):
+    """
+    remove project with given uuid
+    """
+    pm = ProjectManager()
+    res = pm.remove_project(project_uuid)
+    if res is True:
+        click.echo("Removed project '{}'.".format(project_uuid))
+        pm.save()
+    else:
+        click.echo("There is no project '{}'.".format(project_uuid))
+        raise click.Abort()
 
 
 def export_projects(output, type_):

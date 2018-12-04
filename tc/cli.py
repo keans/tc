@@ -1,7 +1,7 @@
 import click
 
 from .cmds import start_project, stop_project, status_project, \
-    list_projects, cancel_project, export_projects
+    list_projects, cancel_project, export_projects, remove_project
 
 
 @click.group()
@@ -54,6 +54,16 @@ def status():
 )
 def cancel():
     cancel_project()
+
+
+@cli.command(
+    help="remove project with given uuid"
+)
+@click.argument(
+    "project_uuid"
+)
+def remove(project_uuid):
+    remove_project(project_uuid)
 
 
 @cli.command(
