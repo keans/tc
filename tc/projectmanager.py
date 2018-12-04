@@ -1,6 +1,7 @@
 import os
 import json
 import csv
+import uuid
 
 from .config import CURRENT_PROJECT, PROJECTS
 from .project import Project
@@ -40,6 +41,17 @@ class ProjectManager:
                     Project.create_from_dict(d)
                     for d in j["projects"]
                 ]
+
+    def _get_unique_uuid(self):
+        """
+        generates a new unique project uuid that is not
+        existing yet in another project
+        """
+        existing_uuids = [p.uuid for p in self.projects]
+        while True:
+            new_uuid = str(uuid.uuid4())[:8]
+            if new_uuid not in existing_uuids:
+                return new_uuid
 
     @property
     def has_current_project(self):

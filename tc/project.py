@@ -1,4 +1,3 @@
-import uuid
 import datetime
 
 import dateutil.parser
@@ -9,9 +8,10 @@ class Project:
     class that represents a project
     """
     def __init__(
-        self, name="", start_time="", end_time="", description="", tags=[]
+        self, uuid="", name="", start_time="", end_time="",
+        description="", tags=[]
     ):
-        self.uuid = str(uuid.uuid4())[:8]
+        self.uuid = uuid
         self.name = name
         self.start_time = start_time
         self.end_time = end_time

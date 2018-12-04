@@ -15,7 +15,10 @@ def start_project(project, tags, description):
         raise click.Abort()
 
     # start new project
-    p = Project(name=project, tags=tags, description=description)
+    p = Project(
+        uuid=pm._get_unique_uuid(), name=project,
+        tags=tags, description=description
+    )
     p.start()
     pm.save_current(p)
 
