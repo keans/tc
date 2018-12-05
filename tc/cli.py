@@ -1,36 +1,25 @@
+import datetime
+
 import click
 
 from .cmds import start_project, stop_project, status_project, \
-    list_projects, cancel_project, export_projects, remove_project
-from .paramtypes import DateTimeType
+    list_projects, cancel_project, export_projects, remove_project, \
+    list_tags, project_logs
+from .paramtypes import DateTimeType, TagType
 
 
-@click.group()
+@click.group(
+    help="Simple time tracker."
+)
 def cli():
     pass
-
-
-def validate_tags(ctx, param, value):
-    """
-    helper to check tags input arguments
-    """
-    try:
-        tags = []
-        for tag in value:
-            if tag.startswith("+"):
-                tags.append(tag[1:])
-            else:
-                raise ValueError
-        return tags
-    except ValueError:
-        raise click.BadParameter("The tags must start with '+'.")
 
 
 @cli.command(
     help="Start a new running project."
 )
 @click.argument("project")
-@click.argument("tags", nargs=-1, callback=validate_tags)
+@click.argument("tags", nargs=-1, type=TagType())
 @click.option(
     "--description",
     help="Additional description for the project."
@@ -53,8 +42,9 @@ def stop(at):
 @cli.command(
     help="Show the status of the currently running project."
 )
-def status():
-    status_project()
+@click.argument("project_uuid", type=str, default=-1)
+def status(project_uuid):
+    status_project(project_uuid)
 
 
 @cli.command(
@@ -73,9 +63,61 @@ def remove(project_uuid):
 
 
 @cli.command(
+    help="List all logged projects in detail."
+)
+@click.option(
+    "--from-date", type=DateTimeType(),
+    default=datetime.datetime.now().replace(
+        hour=0, minute=0, second=0, microsecond=0
+    ),
+    help="From date"
+)
+@click.option(
+    "--to-date", type=DateTimeType(), default=datetime.datetime.now(),
+    help="To date"
+)
+@click.option(
+    "--project", type=str, default=None,
+    help="Project name."
+)
+@click.option(
+    "--tag", type=TagType(), default=None,
+    help="Tag name."
+)
+def log(from_date, to_date, project, tag):
+    project_logs(from_date, to_date, project, tag, False)
+
+
+@cli.command(
+    help="List all logged projects in short form."
+)
+@click.option(
+    "--from-date", type=DateTimeType(),
+    default=datetime.datetime.now().replace(
+        hour=0, minute=0, second=0, microsecond=0
+    ),
+    help="From date"
+)
+@click.option(
+    "--to-date", type=DateTimeType(), default=datetime.datetime.now(),
+    help="To date"
+)
+@click.option(
+    "--project", type=str, default=None,
+    help="Project name."
+)
+@click.option(
+    "--tag", type=TagType(), default=None,
+    help="Tag name."
+)
+def shortlog(from_date, to_date, project, tag):
+    project_logs(from_date, to_date, project, tag, True)
+
+
+@cli.command(
     help="List all available projects."
 )
-def list():
+def projects():
     list_projects()
 
 
@@ -89,3 +131,10 @@ def list():
 @click.argument("output", type=click.File("w"))
 def export(output, type):
     export_projects(output, type)
+
+
+@cli.command(
+    help="List all tags."
+)
+def tags():
+    list_tags()

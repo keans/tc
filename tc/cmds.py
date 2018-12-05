@@ -1,8 +1,9 @@
 import datetime
+import collections
 
 import click
 
-from .utils import format_timedelta
+from .utils import format_timedelta, format_project, format_project_detail
 from .projectmanager import ProjectManager
 from .project import Project
 
@@ -67,21 +68,28 @@ def stop_project(at):
     )
 
 
-def status_project():
+def status_project(project_uuid):
     """
     shows the status of the current project
     """
     pm = ProjectManager()
-    if not pm.has_current_project:
-        click.echo("There is no running project.")
+
+    p = None
+    if project_uuid != -1:
+        # get selected project
+        p = pm.get_project(project_uuid)
+        if p is None:
+            click.echo("There is no project '{}'.".format(project_uuid))
+            raise click.Abort()
+
     else:
+        # get current project
         p = pm.get_current()
-        click.echo(
-            "Project '{}' is running since {} (duration: {}).".format(
-                p.name, p.start_time.strftime("%H:%M:%S"),
-                format_timedelta(p.duration)
-            )
-        )
+        if not pm.has_current_project:
+            click.echo("There is no running project.")
+            raise click.Abort()
+
+    click.echo(format_project(p))
 
 
 def cancel_project():
@@ -102,24 +110,25 @@ def cancel_project():
     )
 
 
-def list_projects():
+def project_logs(from_date, to_date, project, tag, short_format):
     """
-    show a list of all completed
+    show a tracked projects in short form
     """
     pm = ProjectManager()
     for p in pm.projects:
-        click.echo(
-            "{:10} {} to {}  {:>8}  {:15} {}".format(
-                p.uuid,
-                p.start_time.strftime("%H:%M"),
-                p.end_time.strftime("%H:%M"),
-                format_timedelta(p.duration),
-                p.name,
-                "[{}]".format(",".join(p.tags))
-                if len(p.tags) > 0
-                else ""
-            )
-        )
+        if (p.start_time >= from_date) and (p.end_time <= to_date):
+            if (project is not None) and (p.name != project):
+                # skip projects that do not have selected name
+                continue
+
+            if (tag is not None) and (tag not in p.tags):
+                # skip projects that do not have selected tag
+                continue
+
+            if short_format is True:
+                click.echo(format_project(p))
+            else:
+                click.echo(format_project_detail(p))
 
 
 def remove_project(project_uuid):
@@ -143,3 +152,34 @@ def export_projects(output, type_):
     pm = ProjectManager()
     if type_ == "csv":
         pm.csv_export(output)
+
+
+def list_projects():
+    """
+    show a list of all projects
+    """
+    pm = ProjectManager()
+
+    # count projects
+    c = collections.Counter()
+    for p in pm.projects:
+        c[p.name] += 1
+
+    for tag, count in c.items():
+        print("{:4}  {}".format(count, tag))
+
+
+def list_tags():
+    """
+    show a list of all tags
+    """
+    pm = ProjectManager()
+
+    # count tags
+    c = collections.Counter()
+    for p in pm.projects:
+        for tag in p.tags:
+            c[tag] += 1
+
+    for tag, count in c.items():
+        print("{:4}  {}".format(count, tag))

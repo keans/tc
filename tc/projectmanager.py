@@ -98,9 +98,19 @@ class ProjectManager:
         """
         self.projects.append(project)
 
+    def get_project(self, project_uuid):
+        """
+        get project from list of projects by given uuid
+        """
+        for p in self.projects:
+            if p.uuid == project_uuid:
+                return p
+
+        return None
+
     def remove_project(self, project_uuid):
         """
-        add project to the list of projects
+        remove project from the list of projects
         """
         for p in self.projects:
             if p.uuid == project_uuid:

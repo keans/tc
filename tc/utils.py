@@ -17,3 +17,30 @@ def format_timedelta(tdelta):
         fmt = "{days}d{hrs}h{min}m{sec}s"
 
     return fmt.format(**d)
+
+
+def format_project(p):
+    return "{:10} {:5} to {:5}  {:>8}  {:15} {}".format(
+        p.uuid,
+        p.start_time.strftime("%H:%M"),
+        p.end_time.strftime("%H:%M") if p.end_time != None else "*running*",
+        format_timedelta(p.duration),
+        p.name,
+        "[{}]".format(",".join(p.tags))
+        if len(p.tags) > 0 else "",
+    )
+
+
+def format_project_detail(p):
+    return "     UUID:  {}\n  Project:  {}\nFrom Date:  {}\n" \
+           "  To Date:  {}\n Duration:  {}{}\n\n{}".format(
+                p.uuid,
+                p.name,
+                p.start_time.strftime("%a, %d %b %Y %H:%M"),
+                p.end_time.strftime("%a, %d %b %Y %H:%M")
+                if p.end_time is not None else "*running*",
+                format_timedelta(p.duration),
+                "\n     Tags:  [{}]".format(",".join(p.tags))
+                if len(p.tags) > 0 else "",
+                "    {}\n\n".format(p.description) if p.description else ""
+            )
