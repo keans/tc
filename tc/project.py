@@ -29,14 +29,21 @@ class Project:
         return p
 
     @property
+    def is_running(self):
+        """
+        returns True, when the project is still running
+        """
+        return self.end_time is None
+
+    @property
     def duration(self):
         """
-        returns the duration of the project
+        returns the duration of the project based on stored end time
+        or currently running
         """
-        if self.end_time == "":
-            return None
+        end_time = self.end_time or datetime.datetime.now()
 
-        return self.end_time - self.start_time
+        return end_time - self.start_time
 
     def start(self):
         """
@@ -44,11 +51,14 @@ class Project:
         """
         self.start_time = datetime.datetime.now()
 
-    def stop(self):
+    def stop(self, at=None):
         """
         set the stop time to the current time
         """
-        self.end_time = datetime.datetime.now()
+        if at is None:
+            self.end_time = datetime.datetime.now()
+        else:
+            self.end_time = at
 
     def parse(self, j):
         """

@@ -81,7 +81,7 @@ class ProjectManager:
 
         if remove is True:
             # remove current project file
-            os.remove(CURRENT_PROJECT)
+            self.cancel_current()
 
         return p
 

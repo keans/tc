@@ -1,3 +1,5 @@
+import datetime
+
 import click
 
 from .utils import format_timedelta
@@ -29,7 +31,7 @@ def start_project(project, tags, description):
     )
 
 
-def stop_project():
+def stop_project(at):
     """
     stops the currently running project
     """
@@ -39,8 +41,18 @@ def stop_project():
         raise click.Abort()
 
     # get current project
-    current_project = pm.get_current(remove=True)
-    current_project.stop()
+    current_project = pm.get_current()
+    if at is not None:
+        if at < current_project.start_time:
+            click.echo("The stop time cannot be before the start time.")
+            raise click.Abort()
+        elif at > datetime.datetime.now():
+            click.echo("The stop time cannot be in the future.")
+            raise click.Abort()
+
+    # stop project at given time and remove it from running
+    current_project.stop(at)
+    pm.cancel_current()
 
     # store current project in projects list
     pm.add_project(current_project)
@@ -50,7 +62,7 @@ def stop_project():
         "Stopped project '{}' at {} (duration: {}).".format(
             current_project.name,
             current_project.end_time.strftime("%H:%M:%S"),
-            current_project.duration
+            format_timedelta(current_project.duration)
         )
     )
 
@@ -65,8 +77,9 @@ def status_project():
     else:
         p = pm.get_current()
         click.echo(
-            "{}".format(
-                p.name
+            "Project '{}' is running since {} (duration: {}).".format(
+                p.name, p.start_time.strftime("%H:%M:%S"),
+                format_timedelta(p.duration)
             )
         )
 

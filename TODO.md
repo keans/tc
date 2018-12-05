@@ -1,4 +1,4 @@
 # ToDo
 
-* stop with --at argument to specify another end time
+* convert validate_tags function to separate TagType
 * add editing of items
