@@ -16,7 +16,7 @@ def get_long_description():
 
 setup(
     name='tc',
-    version='0.0.1',
+    version='0.0.2',
     description='A simple console-based time tracker.',
     long_description=get_long_description(),
     url='https://github.com/keans/tc',
@@ -44,3 +44,4 @@ setup(
        tc=tc.cli:cli
     """
 )
+

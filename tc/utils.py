@@ -32,15 +32,16 @@ def format_project(p):
 
 
 def format_project_detail(p):
-    return "     UUID:  {}\n  Project:  {}\nFrom Date:  {}\n" \
-           "  To Date:  {}\n Duration:  {}{}\n\n{}".format(
+    return "        uuid:  {}\n     project:  {}\n        from:  {}\n" \
+           "          to:  {}\n    duration:  {}{}\n{}".format(
                 p.uuid,
                 p.name,
                 p.start_time.strftime("%a, %d %b %Y %H:%M"),
                 p.end_time.strftime("%a, %d %b %Y %H:%M")
                 if p.end_time is not None else "*running*",
                 format_timedelta(p.duration),
-                "\n     Tags:  [{}]".format(",".join(p.tags))
+                "\n        tags:  [{}]".format(",".join(p.tags))
                 if len(p.tags) > 0 else "",
-                "    {}\n\n".format(p.description) if p.description else ""
+                " description:  {}\n".format(p.description)
+                if p.description else ""
             )

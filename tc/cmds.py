@@ -8,12 +8,18 @@ from .projectmanager import ProjectManager
 from .project import Project
 
 
-def start_project(project, tags, description):
+def start_project(at, project, tags, description):
     """
     start new project and mark it as current
     """
+    if at is not None and at > datetime.datetime.now():
+        # ensure start date is not in the future
+        click.echo("The start time cannot be in the future.")
+        raise click.Abort()
+
     pm = ProjectManager()
     if pm.has_current_project:
+        # existing project running => abort
         click.echo("There is already a running project.")
         raise click.Abort()
 
@@ -22,7 +28,8 @@ def start_project(project, tags, description):
         uuid=pm._get_unique_uuid(), name=project,
         tags=tags, description=description
     )
-    p.start()
+
+    p.start(at)
     pm.save_current(p)
 
     click.echo(

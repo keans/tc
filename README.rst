@@ -22,7 +22,7 @@ Hint: Note that all data will be stored in ``~/.config/tc/``.
 Examples
 --------
 
-Start a new project ``myproject``
+Start a timer for a new project ``myproject``
 
 ::
 
@@ -49,3 +49,17 @@ List all completed projects:
 ::
 
   tc list
+
+
+Forgot to start a timer? Simply provide the `--at` option
+
+::
+
+  tc start myproject --at 10:00
+
+
+Forgot to stop a timer? Simply provide the `--at` option
+
+::
+
+  tc stop --at 10:00

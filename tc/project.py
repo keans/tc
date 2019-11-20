@@ -45,11 +45,12 @@ class Project:
 
         return end_time - self.start_time
 
-    def start(self):
+    def start(self, at=None):
         """
-        set the start time to the current time
+        set the start time to the given time
+        or current time if not provided
         """
-        self.start_time = datetime.datetime.now()
+        self.start_time = at or datetime.datetime.now()
 
     def stop(self, at=None):
         """

@@ -24,8 +24,12 @@ def cli():
     "--description",
     help="Additional description for the project."
 )
-def start(project, tags, description):
-    start_project(project, tags, description)
+@click.option(
+    "--at", default="", type=DateTimeType(),
+    help="Start time (if not provided current time is used)."
+)
+def start(at, project, tags, description):
+    start_project(at, project, tags, description)
 
 
 @cli.command(
